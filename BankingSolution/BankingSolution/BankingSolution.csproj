@@ -10,7 +10,15 @@
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Http" Version="8.0.0" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="IbanNet.DependencyInjection.ServiceProvider" Version="5.14.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BankingSolution.Application\BankingSolution.Application.csproj" />
+    <ProjectReference Include="..\BankingSolution.Contract.Rest\BankingSolution.Contract.Rest.csproj" />
+    <ProjectReference Include="..\BankingSolution.Infrustructure\BankingSolution.Infrustructure.csproj" />
   </ItemGroup>
 
 </Project>

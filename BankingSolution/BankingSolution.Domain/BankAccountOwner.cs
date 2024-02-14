@@ -9,7 +9,7 @@
         {
             Firstname = firstname;
             LastName = lastName;
-            Birthday = birthday;
+            Birthday = birthday.Date;
             PhoneNumber = phoneNumber;
         }
 

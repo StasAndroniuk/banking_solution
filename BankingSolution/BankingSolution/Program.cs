@@ -1,10 +1,18 @@
 using Asp.Versioning;
+using BankingSolution.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ExceptionFilter>();
+});
+builder.Services.ConfigureServices();
+builder.Services.ConfigureDbContext();
+builder.Services.ConfigureMappers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -32,6 +40,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseHsts();
 
 app.UseAuthorization();
 
