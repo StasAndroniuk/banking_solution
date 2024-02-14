@@ -1,4 +1,6 @@
-﻿namespace BankingSolution.Domain
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BankingSolution.Domain
 {
     /// <summary>
     /// Entity represents bank account and contains financial infromation.
@@ -13,9 +15,11 @@
         }
 
         private BankAccount() { }
+
         /// <summary>
         /// Unique identifier.
         /// </summary>
+        [Key]
         public uint Id { get; set; }
 
         /// <summary>

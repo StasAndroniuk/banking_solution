@@ -12,12 +12,12 @@ namespace BankingSolution.V1.Controllers
     [ApiVersion("1.0")]
     [ApiController]
     [Route("v{v:apiVersion}/[controller]")]
-    public class BankAccountController : Controller
+    public class BankAccountsController : Controller
     {
         private readonly IMapper _mapper;
         private readonly IBankAccountService _bankAccountService;
 
-        public BankAccountController(IMapper mapper, IBankAccountService bankAccountService)
+        public BankAccountsController(IMapper mapper, IBankAccountService bankAccountService)
         {
             _mapper = mapper;
             _bankAccountService = bankAccountService;
@@ -33,8 +33,11 @@ namespace BankingSolution.V1.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task CreateBankAccountAsync([FromBody]CreateBankAccountRequest request, CancellationToken cancellationToken = default) =>
-            await _bankAccountService.CreateBankAccountAsync(_mapper.Map<BankAccountCreationDetails>(request), cancellationToken);
+        public async Task<CreateBankAccountResponse> CreateBankAccountAsync([FromBody] CreateBankAccountRequest request, CancellationToken cancellationToken = default) =>
+           new CreateBankAccountResponse
+           {
+               AccountId = await _bankAccountService.CreateBankAccountAsync(_mapper.Map<BankAccountCreationDetails>(request), cancellationToken)
+           };
 
         [HttpGet("list")]
         [ProducesResponseType(StatusCodes.Status200OK)]

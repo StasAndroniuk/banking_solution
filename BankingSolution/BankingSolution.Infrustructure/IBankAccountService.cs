@@ -11,7 +11,7 @@ namespace BankingSolution.Infrustructure
         /// <param name="details">Details for bank account.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
         /// <returns><see cref="Task"/></returns>
-        Task CreateBankAccountAsync(BankAccountCreationDetails details, CancellationToken cancellationToken = default);
+        Task<uint> CreateBankAccountAsync(BankAccountCreationDetails details, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns list with all existing bank accoutns.

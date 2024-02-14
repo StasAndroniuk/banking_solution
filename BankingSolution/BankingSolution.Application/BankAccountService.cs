@@ -22,7 +22,7 @@ namespace BankingSolution.Application
             _logger = logger;
         }
 
-        public async Task CreateBankAccountAsync(BankAccountCreationDetails details, CancellationToken cancellationToken = default)
+        public async Task<uint> CreateBankAccountAsync(BankAccountCreationDetails details, CancellationToken cancellationToken = default)
         {
             var validationResult = _ibanValidator.Validate(details.Iban);
             if (!validationResult.IsValid)
@@ -59,6 +59,7 @@ namespace BankingSolution.Application
 
             await _context.AddAsync(bankAccount, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+            return bankAccount.Id;
         }
 
         public async Task<BankAccount> GetBankAccountByIdAsync(uint id, CancellationToken cancellationToken = default)

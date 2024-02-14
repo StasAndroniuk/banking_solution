@@ -14,6 +14,7 @@ namespace BankingSolution.Extensions
         {
             services.AddIbanNet();
             services.AddScoped<IBankAccountService, BankAccountService>();
+            services.AddScoped<ITransactionsService, TransactionsService>();
         }
 
         public static void ConfigureDbContext(this IServiceCollection services)

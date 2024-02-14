@@ -16,6 +16,8 @@ namespace BankingSolution.Extensions
                     context.Result = new BadRequestObjectResult(context.Exception.Message); break;
                 case BankAccountNotFoundException:
                     context.Result = new NotFoundObjectResult(context.Exception.Message); break;
+                case InvalidAccountBalanceException:
+                    context.Result = new BadRequestObjectResult(context.Exception.Message); break;
                 default:
                     context.Result = new ObjectResult(context.Exception.Message)
                     {

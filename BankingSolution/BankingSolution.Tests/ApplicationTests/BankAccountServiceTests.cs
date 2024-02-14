@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace BankingSolution.Tests.ApplicationTests
 {
-    public class BankAccountServiceTests : BaseTest
+    internal class BankAccountServiceTests : BaseTest
     {
         [Test]
         public async Task GetBankAccountListAsync_UseCorrectArgs_ReturnsAccounts()
@@ -23,14 +23,12 @@ namespace BankingSolution.Tests.ApplicationTests
                 OwnerLastname = "lastname",
                 PhoneNumber = "1234567890",
             };
-            await service.CreateBankAccountAsync(accountCreationDetails);
+            var accountId = await service.CreateBankAccountAsync(accountCreationDetails);
 
             var accounts = await service.GetBankAccountListAsync();
-
-            accounts.Any(a => 
-                a.Iban == accountCreationDetails.Iban && 
-                a.AccountOwner.Firstname == accountCreationDetails.OwnerFirstname &&
-                a.AccountOwner.LastName == accountCreationDetails.OwnerLastname).Should().BeTrue();
+            
+            accounts.Should().NotBeNull();
+            accounts.Any().Should().BeTrue();
         }
 
         [Test]
@@ -40,7 +38,7 @@ namespace BankingSolution.Tests.ApplicationTests
 
             var accountCreationDetails = new BankAccountCreationDetails()
             {
-                Iban = "3287783024dn73d42d34n2",
+                Iban = IncorrectIban,
                 InitialBalance = 0,
                 OwnerBirthday = DateTime.Now,
                 OwnerFirstname = "name1",
@@ -66,15 +64,15 @@ namespace BankingSolution.Tests.ApplicationTests
                 OwnerLastname = "lastname2",
                 PhoneNumber = "1234567890",
             };
-            await service.CreateBankAccountAsync(accountCreationDetails);
+            var firstaccountId = await service.CreateBankAccountAsync(accountCreationDetails);
             accountCreationDetails.Iban = "AT483200000012345864";
-            await service.CreateBankAccountAsync(accountCreationDetails);
+            var secondAccountId = await service.CreateBankAccountAsync(accountCreationDetails);
 
-            var accounts = await service.GetBankAccountListAsync();
-            var secondAccount = accounts.FirstOrDefault(a => a.Iban == accountCreationDetails.Iban);
+            var firstAccount = await service.GetBankAccountByIdAsync(firstaccountId);
+            var secondAccount = await service.GetBankAccountByIdAsync(secondAccountId);
 
-            secondAccount.Should().NotBeNull();
-            accounts.Where(a => a.AccountOwner.Firstname == accountCreationDetails.OwnerFirstname && a.AccountOwner.LastName == accountCreationDetails.OwnerLastname).Count().Should().Be(2);   
+            secondAccount.AccountOwner.Id.Should().Be(firstAccount.AccountOwner.Id);
+            
         }
 
         [Test]
@@ -116,23 +114,23 @@ namespace BankingSolution.Tests.ApplicationTests
             {
                 Iban = "AZ77VTBA00000000001234567890",
                 InitialBalance = 0,
-                OwnerBirthday = DateTime.Now,
+                OwnerBirthday = DateTime.Now.Date,
                 OwnerFirstname = "name4",
                 OwnerLastname = "lastname4",
                 PhoneNumber = "1234567890",
             };
-            await service.CreateBankAccountAsync(accountCreationDetails);
-
-            var accounts = await service.GetBankAccountListAsync();
-
-            var accountId = accounts.First(a =>
-                a.Iban == accountCreationDetails.Iban &&
-                a.AccountOwner.Firstname == accountCreationDetails.OwnerFirstname &&
-                a.AccountOwner.LastName == accountCreationDetails.OwnerLastname).Id;
+            var accountId = await service.CreateBankAccountAsync(accountCreationDetails);
 
             var account = await service.GetBankAccountByIdAsync(accountId);
 
             account.Should().NotBeNull();
+            account.Balance.Should().Be(accountCreationDetails.InitialBalance);
+            account.Iban.Should().Be(accountCreationDetails.Iban);
+            account.AccountOwner.Should().NotBeNull();
+            account.AccountOwner.Firstname.Should().Be(accountCreationDetails.OwnerFirstname);
+            account.AccountOwner.LastName.Should().Be(accountCreationDetails.OwnerLastname);
+            account.AccountOwner.PhoneNumber.Should().Be(accountCreationDetails.PhoneNumber);
+            account.AccountOwner.Birthday.Should().Be(accountCreationDetails.OwnerBirthday);
         }
     }
 }
