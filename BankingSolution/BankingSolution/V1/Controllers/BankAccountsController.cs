@@ -39,6 +39,11 @@ namespace BankingSolution.V1.Controllers
                AccountId = await _bankAccountService.CreateBankAccountAsync(_mapper.Map<BankAccountCreationDetails>(request), cancellationToken)
            };
 
+        /// <summary>
+        /// Returns list with all created bank accounts
+        /// </summary>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+        /// <returns>List of <see cref="BankAccount"/></returns>
         [HttpGet("list")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -48,6 +53,12 @@ namespace BankingSolution.V1.Controllers
             .Select(a => _mapper.Map<BankAccount>(a))
         };
 
+        /// <summary>
+        /// Returns bank account by specified ID
+        /// </summary>
+        /// <param name="request"><see cref="GetBankAccountRequest"/></param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+        /// <returns><see cref="GetBankAccountResponse"/></returns>
         [HttpGet("{Id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
